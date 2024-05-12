@@ -216,8 +216,8 @@ def main():
     def OppdaterTabell():
         conn = sqlite3.connect('GamasjerASDatabase.db')
         c = conn.cursor()
-        for i in tree.get_children(): 
-            tree.delete(i) #Sletter alt som ligger i treeview(tabellen)
+        for i in varTree.get_children(): 
+            varTree.delete(i) #Sletter alt som ligger i treeview(tabellen)
         try:
             #Joiner sammen alt bortsett fra postnummer ifra postnummer listen sånn at det ikke blir duplikat. Sorterer etter ID sånn at det blir mer ryddig.
             c.execute('''
@@ -242,7 +242,7 @@ def main():
 
             
             for row in resultat:
-                tree.insert("", "end", values=row) #Setter inn resultatene i hver rad i treeview.
+                varTree.insert("", "end", values=row) #Setter inn resultatene i hver rad i treeview.
 
         except Exception as e:
             CTkMessagebox(title="Feilmelding", message=f"Noe gikk galt: {e}", icon="cancel") #Gir error hvis det ikke fungerer.
@@ -251,10 +251,10 @@ def main():
     
     #En funksjon som oppdaterer tabellen med resultatet ifra det man skriver inn i search entry sånn at man får opp info om brukeren.
     def FunkSearchOppdatering():
-            for i in tree.get_children():
-                tree.delete(i) #Sletter det som er i tabellen.
+            for i in varTree.get_children():
+                varTree.delete(i) #Sletter det som er i tabellen.
             for row in FunkSearchBrukere(varSearchEntry.get()): 
-                tree.insert("", "end", values=row) #Henter det man skriver inn entry feltet, setter inn informasjonen ifra FunkSearchBrukere og setter det inn i hver kolonne.
+                varTree.insert("", "end", values=row) #Henter det man skriver inn entry feltet, setter inn informasjonen ifra FunkSearchBrukere og setter det inn i hver kolonne.
             rows = FunkSearchBrukere(varSearchEntry.get())
             if not rows: #Hvis man skriver inn en bruker som ikke finnes så får man en advarsel. 
                 CTkMessagebox(title="Advarsel", message="Brukeren finnes ikke!!!", icon="warning")
@@ -268,46 +268,46 @@ def main():
     varSearchButton.grid(row=1, column=1, sticky='w')
 
     #Her definerer jeg fargene og font størrelse som jeg skal bruke for å endre på hvordan treeview(tabellen) ser ut. 
-    bg_color = window._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"])
-    text_color = window._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkLabel"]["text_color"])
-    selected_color = window._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
-    header_color = window._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
-    font_size = 14
-    header_font_size = 16
+    varBGFarge = window._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"])
+    varTekstFarge = window._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkLabel"]["text_color"])
+    varSelectionFarge = window._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
+    varHeaderFarge = window._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
+    varTekstSize = 14
+    varHeaderTekstSize = 16
 
     #Her velger jeg hvordan treeviewet skal se ut og legger til de fargene jeg definerte tidligere.  
-    treestyle = ttk.Style()
-    treestyle.theme_use('default')
-    treestyle.configure("Treeview", background=bg_color, foreground=text_color, fieldbackground=bg_color, font=('Helvetica', font_size), borderwidth=0)
-    treestyle.configure("Treeview.Heading", background=header_color, foreground=text_color, font=('Helvetica', header_font_size),)
-    treestyle.map('Treeview', background=[('selected', bg_color)], foreground=[('selected', selected_color)])
+    varTreestyle = ttk.Style()
+    varTreestyle.theme_use('default')
+    varTreestyle.configure("Treeview", background=varBGFarge, foreground=varTekstFarge, fieldbackground=varBGFarge, font=('Helvetica', varTekstSize), borderwidth=0)
+    varTreestyle.configure("Treeview.Heading", background=varHeaderFarge, foreground=varTekstFarge, font=('Helvetica', varHeaderTekstSize),)
+    varTreestyle.map('Treeview', background=[('selected', varBGFarge)], foreground=[('selected', varSelectionFarge)])
     window.bind("<<TreeviewSelect>>", lambda event: window.focus_set())
 
     #Her lager jeg treeviewet, jeg lager de forskjellige kolonnene først, også velger jeg hva headingen på kolonnen skal være, i dette tilfellet valgte jeg at de heter det samme.
-    tree = ttk.Treeview(varTab4, columns=("ID", "Fornavn", "Etternavn","Epost", "Telefonnummer", "Postnummer", "Poststed", "Kommunenummer", "Kommunenavn", "Kategori"), show='headings')
-    tree.heading("ID", text="ID")
-    tree.heading("Fornavn", text="Fornavn")
-    tree.heading("Etternavn", text="Etternavn")
-    tree.heading("Epost", text="Epost")
-    tree.heading("Telefonnummer", text="Telefonnummer")
-    tree.heading("Postnummer", text="Postnummer")
-    tree.heading("Poststed", text="Poststed")
-    tree.heading("Kommunenummer", text="Kommunenummer")
-    tree.heading("Kommunenavn", text="Kommunenavn")
-    tree.heading("Kategori", text="Kategori")
+    varTree = ttk.Treeview(varTab4, columns=("ID", "Fornavn", "Etternavn","Epost", "Telefonnummer", "Postnummer", "Poststed", "Kommunenummer", "Kommunenavn", "Kategori"), show='headings')
+    varTree.heading("ID", text="ID")
+    varTree.heading("Fornavn", text="Fornavn")
+    varTree.heading("Etternavn", text="Etternavn")
+    varTree.heading("Epost", text="Epost")
+    varTree.heading("Telefonnummer", text="Telefonnummer")
+    varTree.heading("Postnummer", text="Postnummer")
+    varTree.heading("Poststed", text="Poststed")
+    varTree.heading("Kommunenummer", text="Kommunenummer")
+    varTree.heading("Kommunenavn", text="Kommunenavn")
+    varTree.heading("Kategori", text="Kategori")
     
     #Her bruker jeg grid igjen, også bruker width til å endre størrelsen på kolonnene. Disse innstillingene er tilpasset sånn at det er best på laptoppen min. Men man kan også justere kolonne bredde inne på GUIen ved å dra. 
-    tree.grid(row=3, column=0, columnspan=2, pady=(25, 0 ))
-    tree.column("ID", width=70)
-    tree.column("Fornavn", width=120)
-    tree.column("Etternavn", width=150)
-    tree.column("Epost", width=290)
-    tree.column("Telefonnummer", width=170)
-    tree.column("Postnummer", width=70)
-    tree.column("Poststed", width=100)
-    tree.column("Kommunenummer", width=120)
-    tree.column("Kommunenavn", width=120)
-    tree.column("Kategori", width=70)
+    varTree.grid(row=3, column=0, columnspan=2, pady=(25, 0 ))
+    varTree.column("ID", width=70)
+    varTree.column("Fornavn", width=120)
+    varTree.column("Etternavn", width=150)
+    varTree.column("Epost", width=290)
+    varTree.column("Telefonnummer", width=170)
+    varTree.column("Postnummer", width=70)
+    varTree.column("Poststed", width=100)
+    varTree.column("Kommunenummer", width=120)
+    varTree.column("Kommunenavn", width=120)
+    varTree.column("Kategori", width=70)
 
     #Her kjører jeg funksjonene som adder informasjonen i tabellen og oppdaterer den.
     OppdaterTabell()
